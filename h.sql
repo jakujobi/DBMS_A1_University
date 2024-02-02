@@ -17,7 +17,9 @@ Write an SQL query for each of the following scenarios:
 /* 
 a. Find the ID and name of each instructor in the Finance department
 */
-SELECT
+SELECT ID, name
+FROM instructor
+WHERE dept_name = 'Finance';
 
 /* 
 b. Find the ID and name of each instructor in a department located in the Painter building
