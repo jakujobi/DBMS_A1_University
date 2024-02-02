@@ -296,21 +296,24 @@ WHERE dept_name = 'Finance';
 /* 
 b. Find the ID and name of each instructor in a department located in the Painter building
 */
+SELECT ID, name FROM instructor
+WHERE dept_name IN (SELECT dept_name FROM department WHERE building = 'Painter');
 
-
-
-
--- View students
-SELECT *
-FROM student;
 
 /* 
 c. Find the ID and name of each student who has taken at least one course in the Music department
 */
+SELECT ID, name FROM student
+WHERE ID IN
+    (SELECT ID from takes WHERE course_id IN
+        (SELECT course_id FROM course WHERE dept_name = 'Music'));
+
 
 /* 
 d. Find the ID and name of each student who has taken at least one course section in the year 2017
 */
+SELECT ID, name FROM student
+WHERE ID IN (SELECT ID FROM takes WHERE year = 2017);
 
 
 /* 
@@ -325,6 +328,9 @@ WHERE dept_name <> 'Finance';
 /* 
 f. List the courses_id, semester, year of all courses that were taught in Fall 2017 or in Spring 2018
 */
+SELECT course_id, semester, year FROM course
+WHERE semester IN ('Fall', 'Spring')
+  AND year IN (2017, 2018);
 
 /* 
 g. List the information of all courses which include ‘Co’ as a substring in its title
