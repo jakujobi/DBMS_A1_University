@@ -349,10 +349,15 @@ i. Find the id and name of the students from the ‘Comp. Sci.’ dept whose nam
 SELECT id, name
 FROM student
 WHERE dept_name = 'Comp. Sci.'
-  AND LEN(name)=5;
+  AND length(name) = 5;
+  -- name LIKE '_____';
 
 
 
 /* 
 j. Find the information of the students from ‘Comp. Sci.’ and ‘Elec. Eng.’ Department whose total credits are above 55
 */
+SELECT *
+FROM student
+WHERE dept_name IN ('Comp. Sci.','Elec. Eng.')
+  AND tot_cred > 55;
