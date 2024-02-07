@@ -275,7 +275,7 @@ insert into prereq values ('EE-181', 'PHY-101');
 /*
 - John Akujobi
 - Izak Benitez-Lopez
-- Frezer
+- Frezer Berhanu
 */
 
 /* 
