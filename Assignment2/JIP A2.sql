@@ -34824,23 +34824,56 @@ ORDER BY dept_name, name;
 
 -- c. List all instructors with the lowest salary
 --     There may be more than one instructor with the same salary
+SELECT *
+FROM instructor
 
+SELECT id, name, dept_name, salary
+FROM instructor
+WHERE salary = (SELECT MIN(Salary) FROM instructor)
+
+ORDER BY dept_name, name;
 
 
 
 -- d. List the number of students in each department
+SELECT dept_name, COUNT(ID)
+FROM student
+GROUP BY dept_name
+ORDER BY dept_name
 
-
+SELECT DISTINCT (dept_name)
+FROM instructor
+ORDER BY dept_name
 
 
 -- e. List the ID, name, salary of all instructors whose salary is greater than every average salary of every department
+SELECT id, name, salary, dept_name
+FROM instructor
+WHERE salary > ALL(SELECT AVG(salary) FROM instructor GROUP BY dept_name)
 
-
+SELECT i.id, i.name, i.salary
+FROM instructor i
+WHERE i.salary > ALL (
+    SELECT AVG(i2.salary)
+    FROM instructor i2
+    GROUP BY i2.dept_name
+);
 
 
 -- f. List the department name and the number of instructors for all departments with 2 or more instructors
+SELECT *
+FROM department;
+
+SELECT dept_name, COUNT(ID)
+FROM instructor
+GROUP BY dept_name
+HAVING COUNT(ID) >= 2;
 
 
+SELECT COUNT(dept_name)
+FROM instructor
+GROUP BY dept_name
+HAVING COUNT(ID) >= 2;
 
 
 -- g. List the ID, name, and course_id of all students enrolled in Fall 2004
