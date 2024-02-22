@@ -34897,7 +34897,8 @@ FROM student s
 WHERE NOT EXISTS ( --Learned from stack overflow
     SELECT 1
     FROM takes t
-    WHERE t.ID = s.ID AND t.grade IN ('A', 'A-') );
+    WHERE t.ID = s.ID AND t.grade IN ('A', 'A-') )
+LIMIT 10;
 
 SELECT COUNT(*) AS total_students_never_A_Aminus
 FROM student s
