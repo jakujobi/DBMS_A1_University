@@ -34791,59 +34791,41 @@ SELECT student.ID as student_ID
 FROM student
 JOIN advisor ON student.ID = advisor.s_ID
 JOIN instructor ON advisor.i_ID = instructor.ID
-WHERE instructor.name = 'Sullivan';
+WHERE instructor.name = 'Sullivan'
+LIMIT 10;
 
 --Count
-SELECT COUNT(student.ID) as Total_rows
+SELECT COUNT(student.ID) as Total_students
 FROM student
 JOIN advisor ON student.ID = advisor.s_ID
 JOIN instructor ON advisor.i_ID = instructor.ID
 WHERE instructor.name = 'Sullivan';
 
 
-
--- First part: List all student ID
-
-
-
-SELECT student.ID
-FROM student
-LEFT JOIN advisor ON student.ID = advisor.s_ID
-LEFT JOIN instructor ON advisor.i_ID = instructor.ID
-WHERE instructor.name = 'Sullivan' OR instructor.name IS NULL;
-
-
-SELECT *
-FROM instructor;
 -- b. List all instructors in alphabetical order by department name, and then by instructor’s name
 SELECT id, name, dept_name
 FROM instructor
-ORDER BY dept_name, name;
+ORDER BY dept_name, name
+LIMIT 10;
 
 
 
 -- c. List all instructors with the lowest salary
 --     There may be more than one instructor with the same salary
+-- This one checks accross the board
 SELECT *
 FROM instructor
-
-SELECT id, name, dept_name, salary
-FROM instructor
-WHERE salary = (SELECT MIN(Salary) FROM instructor)
-
-ORDER BY dept_name, name;
-
+WHERE salary = (
+    SELECT MIN(salary)
+    FROM instructor
+);
 
 
 -- d. List the number of students in each department
 SELECT dept_name, COUNT(ID)
 FROM student
 GROUP BY dept_name
-ORDER BY dept_name
-
-SELECT DISTINCT (dept_name)
-FROM instructor
-ORDER BY dept_name
+ORDER BY dept_name;
 
 
 -- e. List the ID, name, salary of all instructors whose salary is greater than every average salary of every department
@@ -34861,14 +34843,10 @@ WHERE i.salary > ALL (
 
 
 -- f. List the department name and the number of instructors for all departments with 2 or more instructors
-SELECT *
-FROM department;
-
 SELECT dept_name, COUNT(ID)
 FROM instructor
 GROUP BY dept_name
 HAVING COUNT(ID) >= 2;
-
 
 SELECT COUNT(dept_name)
 FROM instructor
@@ -34877,17 +34855,48 @@ HAVING COUNT(ID) >= 2;
 
 
 -- g. List the ID, name, and course_id of all students enrolled in Fall 2004
+SELECT student.ID, student.name, takes.course_id
+FROM student
+JOIN takes ON student.ID = takes.ID
+JOIN section ON takes.course_id = section.course_id AND takes.sec_id = section.sec_id
+WHERE takes.semester = 'Fall' AND takes.year = 2004
+LIMIT 10;
 
+SELECT COUNT(student.ID)
+FROM student
+JOIN takes ON student.ID = takes.ID
+JOIN section ON takes.course_id = section.course_id AND takes.sec_id = section.sec_id
+WHERE takes.semester = 'Fall' AND takes.year = 2004;
 
+SELECT COUNT(*)
+FROM student
+JOIN takes ON student.ID = takes.ID
+JOIN section ON takes.course_id = section.course_id AND takes.sec_id = section.sec_id
+WHERE takes.semester = 'Fall' AND takes.year = 2004;
 
 
 -- h. List the course_id and the number of students enrolled of each course offered in Spring 2010
 --     Courses with different sec_id values are the same course
+SELECT section.course_id, COUNT(takes.ID) AS enrolled_students
+FROM section
+JOIN takes ON section.course_id = takes.course_id AND section.sec_id = takes.sec_id
+WHERE section.semester = 'Spring' AND section.year = 2010
+GROUP BY section.course_id
+ORDER BY section.course_id;
 
 
 
 
 -- i. List all student’s names who have never received an A or A- grade in any course
+SELECT s.name
+FROM student s
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM takes t
+    WHERE t.ID = s.ID
+    AND t.grade IN ('A', 'A-')
+)
+LIMIT 10;
 
 
 
